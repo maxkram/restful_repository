@@ -1,8 +1,8 @@
-var bodyParser  = require("body-parser"),
-methodOverride  = require("method-override"),
-mongoose        = require("mongoose"),
-express         = require("express"),
-app             = express();
+var bodyParser      = require("body-parser"),
+methodOverride      = require("method-override"),
+mongoose            = require("mongoose"),
+express             = require("express"),
+app                 = express();
 
 mongoose.connect("mongodb://localhost/restful_blog_app");
 app.set("view engine", "ejs");
@@ -41,6 +41,7 @@ app.get("/blogs/new", function(req, res) {
 });
 
 app.post("/blogs", function(req, res){
+
    Blog.create(req.body.blog, function(err, newBlog){
        if(err){
            res.render("new");
@@ -78,6 +79,16 @@ app.put("/blogs/:id", function(req, res){
            res.redirect("/blogs/" + req.params.id);
        }
    });
+});
+
+app.delete("/blogs/:id", function(req, res){
+   Blog.findByIdAndRemove(req.params.id, function(err){
+       if(err){
+           res.redirect("/blogs");
+       } else {
+           res.redirect("/blogs");
+       }
+   }); 
 });
 
 app.listen(process.env.PORT, process.env.IP, function(){
